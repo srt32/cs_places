@@ -23,8 +23,6 @@ json = File.read(placesOutput)
 parsed = JSON.parse(json)
 placesHash = pp parsed
 
-puts "blah"
-
 results = placesHash["results"] # array of hashes
 
 buildings = Hash.new
@@ -32,4 +30,14 @@ results.each do |res|
   buildings[res["name"]] = res["photos"] if res["photos"] 
 end
 
-# send each photoRef to PhotoRequest
+### send each photoRef to PhotoRequest
+# make a new dir (or find existing one) for school name
+
+## LOOP
+  # through the buildings hash and pull out the NAME and photo reference
+
+  # create http request  
+
+  # take response and rename it (# create image name)
+
+  # download the file 
