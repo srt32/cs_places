@@ -61,7 +61,8 @@ class PlaceRequest
         currentPhotos.each do |photo|
           photoRef = photo["photo_reference"]
           link = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoRef + "&sensor=false&key=" + @key
-          fetchPhotos(link)
+          # DECLARE PHOTO NAME 
+          fetchPhotos(link) # TAKE IN PHOTO NAME
         end
       end
     end
@@ -79,10 +80,9 @@ private
       response = http.request request
 
       case response
-      when Net::HTTPSuccess then
-        puts "BLAH"
+      when Net::HTTPSuccess tcen
         @resBody = response.body
-        file = File.new('XXX.png', 'w')
+        file = File.new('XXX.png', 'w') # TAKE PHOTO NAME FROM INPUT
         File.open(file.path,'w') do |f|
           f.write response.body
         end
