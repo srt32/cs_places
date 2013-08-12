@@ -74,7 +74,6 @@ private
   def fetchPhotos(link, limit = 10, photoName)
     @currentName = photoName
     @currentFileName = @currentName.to_s.gsub(/\s+/, "") + ".png"
-    puts "first" + @currentFileName
     raise ArgumentError, 'These redirects are crazy (too many)' if limit == 0
 
     uri = URI(link)
@@ -86,7 +85,6 @@ private
       case response
       when Net::HTTPSuccess then
         @resBody = response.body
-        puts "second" + @currentFileName ###
         file = File.new(@currentFileName, 'w') # TAKE PHOTO NAME FROM INPUT
         File.open(file.path,'w') do |f|
           f.write response.body
