@@ -50,7 +50,7 @@ class PlaceRequest
     return @results
   end
 
-  def getPhotos(results)
+  def getPhotos(results) # NEED TO FIGURE OUT IMAGE NAMING
     results = results
     buildings = Hash.new
     @results.each do |res|
@@ -69,14 +69,25 @@ class PlaceRequest
 
 private
 
-  def fetchPhotos(link)
+  def fetchPhotos(link, limit = 10)
+    raise ArgumentError, 'These redirects are crazy (too many)' if limit == 0
+
     uri = URI(link)
     Net::HTTP.start(uri.host, uri.port,
           :use_ssl => uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       response = http.request request
-      @resBody = response.body
-      puts @resBody
+
+      case response
+      when Net::HTTPSuccess then
+        @resBody = response.body
+      when Net::HTTPRedirection then
+        location = response['location']
+        warn "redirected to #{location}"
+        fetchPhotos(location, limit - 1)
+      else
+        response.value
+      end
     end
   end
 
