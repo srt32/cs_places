@@ -3,7 +3,7 @@ require 'json'
 require 'pp'
 
 class PlaceRequest
-  def initialize(reqType, key, location, radius, sensor, placesOutput)
+  def initialize(reqType, key, location, radius, sensor)
     @reqType = reqType
     @key = key
     @location = location
