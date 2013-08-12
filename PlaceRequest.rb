@@ -9,7 +9,6 @@ class PlaceRequest
     @location = location
     @radius = radius
     @sensor = sensor
-    @placesOutput = placesOutput
   end
 
   def callIt
@@ -59,10 +58,12 @@ class PlaceRequest
       currentPhotos = buildings[currentBuilding]
       if !currentPhotos.nil?
         currentPhotos.each do |photo|
+          count = 0
           photoRef = photo["photo_reference"]
           link = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoRef + "&sensor=false&key=" + @key
-          # DECLARE PHOTO NAME 
-          fetchPhotos(link) # TAKE IN PHOTO NAME
+          @photoName = currentBuilding + count.to_s
+          count = count + 1
+          fetchPhotos(link, @photoName)
         end
       end
     end
@@ -70,7 +71,10 @@ class PlaceRequest
 
 private
 
-  def fetchPhotos(link, limit = 10)
+  def fetchPhotos(link, limit = 10, photoName)
+    @currentName = photoName
+    @currentFileName = @currentName.to_s.gsub(/\s+/, "") + ".png"
+    puts "first" + @currentFileName
     raise ArgumentError, 'These redirects are crazy (too many)' if limit == 0
 
     uri = URI(link)
@@ -80,9 +84,10 @@ private
       response = http.request request
 
       case response
-      when Net::HTTPSuccess tcen
+      when Net::HTTPSuccess then
         @resBody = response.body
-        file = File.new('XXX.png', 'w') # TAKE PHOTO NAME FROM INPUT
+        puts "second" + @currentFileName ###
+        file = File.new(@currentFileName, 'w') # TAKE PHOTO NAME FROM INPUT
         File.open(file.path,'w') do |f|
           f.write response.body
         end
@@ -90,7 +95,7 @@ private
       when Net::HTTPRedirection then
         location = response['location']
         warn "redirected to #{location}"
-        fetchPhotos(location, limit - 1)
+        fetchPhotos(location, limit - 1, @currentName)
       else
         response.value
       end
@@ -109,5 +114,4 @@ private
     end 
     return base
   end
-
 end
