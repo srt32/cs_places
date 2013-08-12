@@ -80,7 +80,13 @@ private
 
       case response
       when Net::HTTPSuccess then
+        puts "BLAH"
         @resBody = response.body
+        file = File.new('XXX.png', 'w')
+        File.open(file.path,'w') do |f|
+          f.write response.body
+        end
+        file.close
       when Net::HTTPRedirection then
         location = response['location']
         warn "redirected to #{location}"
