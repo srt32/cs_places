@@ -30,8 +30,10 @@ class PlaceRequest
             :use_ssl => uri.scheme == 'https') do |http|
       request = Net::HTTP::Get.new uri
       response = http.request request
-      puts response.body
+      @resBody = response.body
+      # puts response.body
     end
+    return @resBody
   end
 
 private

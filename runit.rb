@@ -8,6 +8,10 @@ req = PlaceRequest.new(reqType = "place",
 
 results = req.callIt
 
+File.open( "places.txt", "w" ) do |f|
+  f.write(results)
+end
+
 # Parse the results
 
 # send each photoRef to PhotoRequest
