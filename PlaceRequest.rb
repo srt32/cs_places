@@ -52,6 +52,7 @@ class PlaceRequest
   def getPhotos(results) # NEED TO FIGURE OUT IMAGE NAMING
     results = results
     buildings = Hash.new
+    makeAndChangeDirs("downloads")
     @results.each do |res|
       buildings[res["name"]] = res["photos"] if res["photos"]
       currentBuilding = res["name"]
@@ -70,6 +71,11 @@ class PlaceRequest
   end
 
 private
+
+  def makeAndChangeDirs(name = "downloads")
+    Dir.mkdir(name)
+    Dir.chdir("./" + name)
+  end
 
   def fetchPhotos(link, limit = 10, photoName)
     @currentName = photoName
